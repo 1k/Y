@@ -138,14 +138,20 @@ header h1 {
 
 .city-nav li a {
     text-decoration: none;
-    color: var(--secondary-color);
+    color: var(--nav-text);  
+    background-color: rgba(13, 27, 42, 0.1);  
     padding: 0.5rem 1rem;
     border-radius: 4px;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 1px solid transparent;
 }
 
 .city-nav li a:hover {
-    background-color: rgba(44, 62, 80, 0.1);
+    color: var(--nav-background);  
+    background-color: var(--nav-text);  
+    border: 1px solid var(--nav-background);
+    box-shadow: 0 2px 4px rgba(13, 27, 42, 0.2);
 }
 
 main {
