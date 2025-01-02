@@ -145,6 +145,35 @@ footer {
     .detail-grid {
         grid-template-columns: 1fr;
     }
+
+    .header-container {
+        text-align: center;
+        padding: 2rem 1rem;
+        background-color: #2c3e50;  
+    }
+
+    .header-container h1 {
+        color: #ffffff;  
+        margin: 0;
+        font-size: 1.8rem;  
+    }
+
+    .back-to-home {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 1rem;
+        padding: 12px;
+        background-color: #2c3e50;  
+        color: white;  
+        text-decoration: none;
+        border-radius: 0;  
+        transition: background-color 0.3s ease;
+    }
+
+    .back-to-home:hover {
+        background-color: #34495e;  
+    }
 }
 
 @media (max-width: 768px) {
