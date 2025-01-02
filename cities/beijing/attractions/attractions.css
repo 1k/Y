@@ -103,6 +103,22 @@
     margin-bottom: 1rem;
 }
 
+.back-to-home {
+    display: block;
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.back-to-home:hover {
+    background-color: var(--accent-color);
+}
+
 @media screen and (max-width: 768px) {
     .detail-grid {
         grid-template-columns: 1fr;
