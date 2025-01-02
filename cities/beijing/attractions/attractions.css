@@ -119,6 +119,28 @@
     background-color: var(--accent-color);
 }
 
+.header-container {
+    text-align: center;
+    padding: 2rem 1rem;
+    background-color: rgba(0,0,0,0.05);
+}
+
+.header-container h1 {
+    color: var(--primary-color);
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.05);
+}
+
+.footer-content {
+    margin-bottom: 1rem;
+}
+
 @media screen and (max-width: 768px) {
     .detail-grid {
         grid-template-columns: 1fr;
