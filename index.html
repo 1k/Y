@@ -30,18 +30,15 @@
     <header>
         <div class="header-container">
             <h1>梓航城市发现之旅</h1>
-            <nav aria-label="城市导航">
-                <div class="mobile-nav-toggle">
-                    <div class="nav-hamburger">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-                <div class="mobile-nav-overlay">
-                    <div class="mobile-nav-container">
-                        <div class="mobile-nav-close">&times;</div>
-                        <ul id="city-nav" class="city-nav">
+            <button class="mobile-nav-toggle" aria-label="切换导航菜单">
+                <div class="hamburger"></div>
+            </button>
+
+            <div class="mobile-nav-overlay">
+                <div class="mobile-nav-content">
+                    <button class="mobile-nav-close" aria-label="关闭导航菜单">×</button>
+                    <nav>
+                        <ul class="city-nav">
                             <li><a href="#beijing">北京</a></li>
                             <li><a href="#shanghai">上海</a></li>
                             <li><a href="#chengdu">成都</a></li>
@@ -63,9 +60,9 @@
                             <li><a href="#zaozhuang">枣庄</a></li>
                             <li><a href="#rizhao">日照</a></li>
                         </ul>
-                    </div>
+                    </nav>
                 </div>
-            </nav>
+            </div>
         </div>
     </header>
 
