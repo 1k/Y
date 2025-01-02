@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 移动端导航切换
     navToggle.addEventListener('click', () => {
-        cityNav.classList.toggle('nav-open');
+        cityNav.classList.toggle('show');
         navToggle.setAttribute('aria-expanded', 
             navToggle.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
         );
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.city-nav a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            cityNav.classList.remove('nav-open');
+            cityNav.classList.remove('show');
             navToggle.setAttribute('aria-expanded', 'false');
         });
     });
