@@ -131,6 +131,23 @@
     font-size: 2.5rem;
 }
 
+.top-home-link {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.top-home-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 footer {
     text-align: center;
     padding: 1rem;
@@ -150,6 +167,7 @@ footer {
         text-align: center;
         padding: 2rem 1rem;
         background-color: #2c3e50;  
+        position: relative;
     }
 
     .header-container h1 {
@@ -173,6 +191,13 @@ footer {
 
     .back-to-home:hover {
         background-color: #34495e;  
+    }
+
+    .top-home-link {
+        top: 10px;
+        left: 10px;
+        font-size: 0.9rem;
+        padding: 5px 8px;
     }
 }
 
