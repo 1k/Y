@@ -479,3 +479,82 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* 移动端优化 */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .city-section {
+        padding: 1rem;
+    }
+
+    .city-section-header {
+        text-align: center;
+    }
+
+    .city-section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .city-section-header p {
+        font-size: 0.9rem;
+    }
+
+    .city-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .city-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .city-card-image {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 1rem;
+    }
+
+    .city-card-content {
+        padding: 0;
+        text-align: center;
+    }
+
+    .back-to-top {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        right: 10px;
+        bottom: 10px;
+    }
+
+    header {
+        padding: 0.5rem;
+    }
+
+    .header-container h1 {
+        font-size: 1.5rem;
+    }
+
+    main {
+        padding: 0.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 12px;
+    }
+
+    .city-section-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .city-section-header p {
+        font-size: 0.8rem;
+    }
+}
