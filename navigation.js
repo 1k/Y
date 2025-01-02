@@ -36,4 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    // 为导航按钮添加图标
+    const navToggleIcon = document.createElement('span');
+    navToggleIcon.classList.add('nav-toggle-icon');
+    navToggle.appendChild(navToggleIcon);
+
+    // 移动端导航切换
+    navToggle.addEventListener('click', () => {
+        const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+        cityNav.classList.toggle('nav-open', !isOpen);
+        overlay.classList.toggle('nav-overlay-active', !isOpen);
+        navToggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        
+        // 禁止背景滚动
+        document.body.style.overflow = !isOpen ? 'hidden' : 'auto';
+    });
 });
