@@ -333,6 +333,14 @@ footer {
     transition: all 0.3s ease;
     display: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.back-to-top i {
+    position: static;  /* 确保图标不会脱离文档流 */
+    margin: 0;  /* 移除可能的边距 */
 }
 
 .back-to-top:hover {
@@ -556,5 +564,60 @@ footer {
 
     .city-section-header p {
         font-size: 0.8rem;
+    }
+}
+
+/* 移动端城市导航 */
+.mobile-city-nav {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .mobile-city-nav {
+        display: block;
+        background-color: var(--nav-background);
+        padding: 10px 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .mobile-city-nav-container {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-city-nav-scroll {
+        display: flex;
+        gap: 15px;
+        padding: 0 15px;
+        white-space: nowrap;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none;  /* IE 10+ */
+    }
+
+    .mobile-city-nav-scroll::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+
+    .mobile-city-nav-item {
+        color: var(--nav-text);
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 20px;
+        background-color: rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .mobile-city-nav-item:hover {
+        background-color: rgba(255,255,255,0.2);
+        transform: scale(1.05);
+    }
+
+    .mobile-city-nav-item.active {
+        background-color: var(--nav-active);
+        color: white;
     }
 }
