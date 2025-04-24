@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勇敢的梓航与豆豆</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: white;
+            color: #333;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+        .story-content {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .highlight-color {
+            color: #FE1110;
+        }
+        .audio-progress {
+            background: linear-gradient(to right, #FE1110, rgba(254, 17, 16, 0.5));
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .scroll-reveal {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="container mx-auto max-w-md px-4 py-6">
+        <!-- 音频播放器 -->
+        <div class="audio-player fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center">
+                    <img src="https://via.placeholder.com/50" class="w-12 h-12 rounded-full mr-3" alt="封面">
+                    <div>
+                        <h2 class="text-lg font-bold">勇敢的梓航与豆豆</h2>
+                        <p class="text-sm text-gray-500">原创有声故事</p>
+                    </div>
+                </div>
+                <div class="audio-controls flex items-center">
+                    <button id="playPauseBtn" class="text-2xl highlight-color mr-4">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="audio-progress-container h-1 bg-gray-200 relative">
+                <div id="audioProgress" class="audio-progress absolute top-0 left-0 h-full" style="width: 0%;"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                <span id="currentTime">00:00</span>
+                <span id="duration">00:00</span>
+            </div>
+        </div>
+
+        <!-- 故事内容 -->
+        <div class="story-content mt-4 space-y-4 pb-24">
+            <h1 class="text-3xl font-bold highlight-color mb-4 scroll-reveal">勇敢的梓航与豆豆</h1>
+            
+            <div id="storyText" class="space-y-4">
+                <!-- 故事内容将通过JavaScript动态加载 -->
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer">
+        <source src="yonggan.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const audioProgress = document.getElementById('audioProgress');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const storyTextEl = document.getElementById('storyText');
+
+        // 故事文本
+        const storyContent = `勇敢的梓航与豆豆
+神秘的失踪
+在一个阳光明媚的早晨，10岁的梓航和4岁的豆豆背着书包，像往常一样走进各自的学校。梓航是日照市新营小学四年级的学生，豆豆则在日照市卓越幼儿园上小班。他们是亲兄弟，住在城建花园，每逢周末或假期，就会去莱顿小镇的爷爷家玩耍。兄弟俩感情特别好，虽然年龄差了6岁，但总有说不完的话。
+
+今天，学校里却有些不一样。空气中弥漫着紧张又兴奋的气氛——明天就是学校一年一度的"才艺大比拼"活动了！梓航的班级准备了一个有趣的小品，导演是米小圈，梓航和他的好朋友姜小牙、铁头都是演员。豆豆的幼儿园小班则准备了一个可爱的舞蹈，豆豆和他的好朋友十六妹也在其中。
+
+可是，就在彩排前一天，一个坏消息传来了——小品表演最重要的道具，一顶神奇的魔法帽，竟然不见了！这顶魔法帽是小品的关键，没有它，表演就没法继续。米小圈急得团团转，抓着头发说："这下完了，明天怎么办啊？"同学们也七嘴八舌地议论着。
+
+梓航皱着眉头，心想："魔法帽丢了，表演怎么办？"他低头一看，豆豆正瞪着大眼睛看着他，好像在问："哥哥，我们能找到吗？"这时，米小圈跑过来，一把拍在梓航肩膀上："梓航，你是我们班最勇敢的人，你能帮我们找回魔法帽吗？"
+
+梓航心里一紧，他知道这不是件小事，但他不想让大家失望。他深吸一口气，坚定地说："我一定找到魔法帽！"`;
+
+        // 将故事文本分段并添加动画效果
+        function renderStoryText() {
+            const paragraphs = storyContent.split('\n\n');
+            storyTextEl.innerHTML = paragraphs.map((para, index) => 
+                `<p class="scroll-reveal" style="animation-delay: ${index * 0.2}s">${para}</p>`
+            ).join('');
+        }
+
+        // 音频播放控制
+        playPauseBtn.addEventListener('click', () => {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audioPlayer.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+
+        // 更新进度条和时间
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            audioProgress.style.width = `${progressPercent}%`;
+
+            // 格式化时间
+            const formatTime = (seconds) => {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            };
+
+            currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+            durationEl.textContent = formatTime(audioPlayer.duration || 0);
+        });
+
+        // 初始化
+        renderStoryText();
+    </script>
+</body>
+</html>
