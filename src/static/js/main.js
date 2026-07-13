@@ -133,17 +133,6 @@
     });
   }
 
-  /* ---- intro collapse ---- */
-  var introToggle = $('#introToggle');
-  var introContent = $('#introContent');
-  if (introToggle && introContent) {
-    introToggle.addEventListener('click', function () {
-      var expanded = introContent.classList.toggle('expanded');
-      introToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-      introToggle.firstChild.textContent = expanded ? '收起 ' : '展开全文 ';
-    });
-  }
-
   /* ---- reveal on scroll ---- */
   var reveals = $all('.reveal');
   if ('IntersectionObserver' in window && reveals.length) {

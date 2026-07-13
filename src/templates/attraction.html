@@ -31,12 +31,9 @@
                 </div>
                 <div class="intro-content" id="introContent">
                     {% for p in attraction.intro %}
-                    <p{% if loop.index > 2 %} class="intro-more"{% endif %}>{{ p }}</p>
+                    <p>{{ p }}</p>
                     {% endfor %}
                 </div>
-                {% if attraction.intro|length > 2 %}
-                <button class="intro-toggle" id="introToggle" aria-expanded="false">展开全文 <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
-                {% endif %}
 
                 {% if attraction.highlights %}
                 <div class="section-label">
