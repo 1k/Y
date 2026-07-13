@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ site.title_full }}{% endblock %}
+{% block description %}{{ site.hero_sub }}{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="hero">
+    <span class="hero-bg-num" aria-hidden="true">21</span>
+    <div class="hero-inner">
+        <span class="hero-kicker">{{ site.hero_kicker }}</span>
+        <h1 class="hero-title">{{ site.hero_title.replace(' · ', ' <span class="accent">·</span> ') | safe }}</h1>
+        <p class="hero-sub">{{ site.hero_sub }}</p>
+        <a class="hero-cta" href="#cities">浏览城市 <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+        <span>SCROLL</span>
+        <span class="line"></span>
+    </div>
+    <div class="hero-lines" aria-hidden="true">
+        <svg viewBox="0 0 1440 220" preserveAspectRatio="none">
+            <path d="M0 180 L240 120 L480 170 L720 96 L960 168 L1200 110 L1440 170 L1440 220 L0 220 Z" fill="none" stroke="#B5532E" stroke-width="1" opacity="0.5"/>
+            <path d="M0 220 L220 150 L460 210 L700 150 L960 214 L1200 152 L1440 206" fill="none" stroke="#1C1B19" stroke-width="1" opacity="0.25"/>
+        </svg>
+    </div>
+</section>
+
+<!-- City directory -->
+<section class="directory-section" id="cities">
+    <div class="container">
+        <div class="section-head reveal">
+            <span class="kicker">City Index</span>
+            <h2>选择城市，开启旅程</h2>
+            <p class="section-sub">二十一座城，按区域分布，各藏精华</p>
+        </div>
+        <div class="city-grid">
+            {% for c in cities %}
+            <a class="city-tile reveal" href="/cities/{{ c.id }}/" style="--tint: {{ c.tint }}">
+                <span class="city-tile-no">{{ c.index }}</span>
+                <span class="city-tile-name">{{ c.name }}</span>
+                <span class="city-tile-meta">{{ c.attractions|length }} 处精选 · {{ c.region }}</span>
+                <i class="fas fa-arrow-right city-tile-go" aria-hidden="true"></i>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Editor's picks -->
+<section class="featured-section">
+    <div class="container">
+        <div class="section-head reveal">
+            <span class="kicker">Editor's Pick</span>
+            <h2>编辑精选</h2>
+            <p class="section-sub">六处不可错过的风景</p>
+        </div>
+        <div class="featured-grid">
+            {% for f in featured %}
+            <a class="featured-card reveal" href="{{ f.url }}" style="--tint: {{ f.tint }}">
+                <span class="featured-init" aria-hidden="true">{{ f.name[0] }}</span>
+                <span class="featured-body">
+                    <span class="featured-city">{{ f.city }}</span>
+                    <span class="featured-name">{{ f.name }}</span>
+                    <span class="featured-go">查看详情 <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

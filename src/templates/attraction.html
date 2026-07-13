@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}{{ attraction.display_name }} - {{ attraction.subtitle }} | {{ site.title }}{% endblock %}
+{% block description %}{{ attraction.meta_description or (attraction.short or attraction.subtitle) }}{% endblock %}
+{% block keywords %}{{ attraction.meta_keywords }}{% endblock %}
+
+{% block content %}
+<section class="detail-hero" style="--tint: {{ attraction.tint }}">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="面包屑">
+            <a href="/">首页</a><span class="sep">/</span>
+            <a href="/cities/{{ city.id }}/">{{ city.name }}</a><span class="sep">/</span>
+            <span>{{ attraction.display_name }}</span>
+        </nav>
+        <p class="detail-city">{{ city.name }}</p>
+        <h1 class="detail-title">{{ attraction.display_name }}</h1>
+        {% if attraction.subtitle %}<p class="detail-subtitle">{{ attraction.subtitle }}</p>{% endif %}
+        <div class="detail-meta">
+            {% if attraction.location %}<span class="chip"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>{{ attraction.location }}</span>{% endif %}
+            {% if attraction.tag %}<span class="chip"><i class="fas fa-landmark" aria-hidden="true"></i>{{ attraction.tag }}</span>{% endif %}
+        </div>
+    </div>
+</section>
+
+<main class="detail-main">
+    <div class="container">
+        <div class="detail-grid">
+            <div class="detail-body">
+                <div class="section-label">
+                    <span class="num">01</span>
+                    <h2>景点介绍</h2>
+                </div>
+                <div class="intro-content" id="introContent">
+                    {% for p in attraction.intro %}
+                    <p{% if loop.index > 2 %} class="intro-more"{% endif %}>{{ p }}</p>
+                    {% endfor %}
+                </div>
+                {% if attraction.intro|length > 2 %}
+                <button class="intro-toggle" id="introToggle" aria-expanded="false">展开全文 <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
+                {% endif %}
+
+                {% if attraction.highlights %}
+                <div class="section-label">
+                    <span class="num">02</span>
+                    <h2>看点一览</h2>
+                </div>
+                <div class="highlight-points">
+                    {% for h in attraction.highlights %}
+                    <div class="point">
+                        <h3>{{ h.title }}</h3>
+                        <p>{{ h.text }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <aside class="detail-aside">
+                <div class="info-panel">
+                    <p class="panel-title">实用信息</p>
+                    {% for item in attraction.info %}
+                    <div class="detail-item">
+                        <h3>{{ item.title }}</h3>
+                        <p>{{ item.text }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if siblings %}
+                <div class="info-panel more-panel">
+                    <p class="panel-title">本城其他看点</p>
+                    <div class="more-list">
+                        {% for s in siblings %}
+                        <a class="more-item" href="/cities/{{ city.id }}/attractions/{{ s.id }}/">{{ s.display_name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </aside>
+        </div>
+
+        {% if prev or next %}
+        <nav class="pager" aria-label="同城景点导航">
+            {% if prev %}
+            <a class="pager-item prev" href="{{ prev.href }}">
+                <span class="pager-dir"><i class="fas fa-arrow-left" aria-hidden="true"></i> 上一处</span>
+                <span class="pager-name">{{ prev.name }}</span>
+            </a>
+            {% else %}
+            <span class="pager-item prev disabled"></span>
+            {% endif %}
+            <a class="pager-home" href="/cities/{{ city.id }}/"><i class="fas fa-th-large" aria-hidden="true"></i> 返回城市</a>
+            {% if next %}
+            <a class="pager-item next" href="{{ next.href }}">
+                <span class="pager-dir">下一处 <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                <span class="pager-name">{{ next.name }}</span>
+            </a>
+            {% else %}
+            <span class="pager-item next disabled"></span>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+        <div class="back-home-wrap">
+            <a class="back-home" href="/"><i class="fas fa-arrow-left" aria-hidden="true"></i> 返回首页</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

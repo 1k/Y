@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ city.name }} · 城市指南 | {{ site.title }}{% endblock %}
+{% block description %}{{ city.desc }}{% endblock %}
+
+{% block content %}
+<!-- City hero -->
+<section class="city-hero" style="--tint: {{ city.tint }}">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="面包屑">
+            <a href="/">首页</a><span class="sep">/</span>
+            <span>{{ city.name }}</span>
+        </nav>
+        <p class="city-hero-region">{{ city.region }}地区</p>
+        <h1 class="city-hero-name">{{ city.name }}</h1>
+        <p class="city-hero-desc">{{ city.desc }}</p>
+        <div class="city-hero-stats">
+            <span><b>{{ city.attractions|length }}</b> 处精选景点</span>
+            <span class="dot" aria-hidden="true">·</span>
+            <span><b>{{ city.region }}</b> 地区</span>
+        </div>
+    </div>
+</section>
+
+<!-- Attractions index + side -->
+<section class="city-body">
+    <div class="container city-layout">
+        <div class="city-list-wrap">
+            <div class="section-head reveal">
+                <span class="kicker">Attractions</span>
+                <h2>值得一去</h2>
+            </div>
+            <div class="attr-list">
+                {% for a in city.attractions %}
+                <a class="attr-row reveal" href="/cities/{{ city.id }}/attractions/{{ a.id }}/" style="--tint: {{ a.tint }}">
+                    <span class="attr-row-no">{{ a.no or city.index }}</span>
+                    <span class="attr-row-main">
+                        <span class="attr-row-name">{{ a.display_name }}</span>
+                        <span class="attr-row-desc">{{ a.short or a.subtitle or '' }}</span>
+                    </span>
+                    {% if a.tag %}<span class="attr-row-tag">{{ a.tag }}</span>{% endif %}
+                    <span class="attr-row-go"><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <aside class="city-side">
+            <div class="side-card">
+                <p class="side-title">城市速览</p>
+                <ul class="side-facts">
+                    <li><span>所属区域</span><b>{{ city.region }}</b></li>
+                    <li><span>精选景点</span><b>{{ city.attractions|length }} 处</b></li>
+                </ul>
+            </div>
+            <div class="side-card">
+                <p class="side-title">其他城市</p>
+                <div class="side-cities">
+                    {% for c in cities %}
+                    {% if c.id != city.id %}
+                    <a class="side-city" href="/cities/{{ c.id }}/">{{ c.name }}</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}

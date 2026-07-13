@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ site.title_full }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="{% block description %}收录全国二十余座城市的精华景点，感受多元文化与自然之美，带您游遍祖国山川。{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}中国旅游, 城市景点, 文化之旅, 自然风光, 旅游指南{% endblock %}">
+    <meta name="google-adsense-account" content="{{ site.adsense }}">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ site.adsense }}" crossorigin="anonymous"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script src="/assets/js/main.js" defer></script>
+</head>
+<body id="top">
+    <a class="skip-link" href="#main">跳至主内容</a>
+
+    <header class="site-header" id="siteHeader">
+        <div class="header-inner">
+            <a class="brand" href="/" aria-label="{{ site.title }} 首页">
+                <span class="brand-mark">梓</span>
+                <span class="brand-text">{{ site.title }}</span>
+            </a>
+            <div class="header-search">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="search" id="siteSearch" placeholder="搜索城市或景点…" autocomplete="off" aria-label="搜索城市或景点" aria-expanded="false" aria-controls="searchResults">
+                <div class="search-results" id="searchResults" role="listbox" hidden></div>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="打开城市导航" aria-expanded="false" aria-controls="cityDirectory">
+                <i class="fas fa-stream" aria-hidden="true"></i><span>城市导航</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 城市目录浮层（按区域分组，链接到城市页） -->
+    <div class="city-directory" id="cityDirectory" aria-hidden="true">
+        <div class="directory-backdrop" id="directoryBackdrop"></div>
+        <div class="directory-panel" role="dialog" aria-modal="true" aria-label="城市目录">
+            <button class="directory-close" id="directoryClose" aria-label="关闭城市导航"><i class="fas fa-times" aria-hidden="true"></i></button>
+            <div class="directory-head">
+                <p class="kicker">City Index</p>
+                <h2>城市目录</h2>
+                <p class="directory-sub">二十一座城，山河与烟火</p>
+            </div>
+            <nav class="directory-groups" aria-label="城市列表">
+                {% for region, items in regions %}
+                <div class="directory-group">
+                    <p class="directory-region">{{ region }}</p>
+                    <div class="directory-grid">
+                        {% for c in items %}
+                        <a class="directory-item" href="/cities/{{ c.id }}/"><span class="directory-no">{{ c.index }}</span><span class="directory-name">{{ c.name }}</span></a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </nav>
+        </div>
+    </div>
+
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span class="footer-brand"><span class="brand-mark">梓</span> {{ site.title }}</span>
+            <nav class="footer-links" aria-label="页脚导航">
+                <a href="/">首页</a>
+                <a href="#top">回到顶部</a>
+            </nav>
+        </div>
+        <p class="footer-copy">© 2025 {{ site.title }} · {{ site.footer_note }}</p>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top" title="返回顶部" aria-label="返回顶部">
+        <i class="fas fa-arrow-up" aria-hidden="true"></i>
+    </button>
+
+    <script>window.SEARCH_INDEX = {{ search_index|tojson }};</script>
+</body>
+</html>
