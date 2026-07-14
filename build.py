@@ -44,7 +44,9 @@ def city_tint(index_num):
 
 # 将扁平的 intro 段落数组解析为带层级的小节（内容不改动 site.json 原文）
 _ORD_RE = re.compile(r'^([一二三四五六七八九十]+[、.．]|[（(][一二三四五六七八九十]+[)）]|[0-9]+[.．、])')
-_COLON_RE = re.compile(r'[：:]')
+# 标题与正文之间的分隔符：强分隔优先（： 。），弱分隔兜底（， 、 ； 空白）
+_STRONG_SEP = re.compile(r'[：:。]')
+_WEAK_SEP = re.compile(r'[，、；\s]')
 
 
 def _strip_ordinal(text):
@@ -56,7 +58,8 @@ def parse_intro_sections(attraction):
 
     处理两种写法：
       (a) 短标题段「一、概览与地理位置」后接正文段；
-      (b) 标题与正文同段「一、概览与地理位置：正文……」，按首个冒号拆分。
+      (b) 标题与正文同段「一、概览与地理位置。正文……」，按首个分隔符拆分
+          （强分隔 ： 。 优先；弱分隔 ， 、 ； 空白 兜底），分隔符不计入标题。
     """
     intro = attraction.get("intro") or []
     sections = []
@@ -65,14 +68,13 @@ def parse_intro_sections(attraction):
         m = _ORD_RE.match(p)
         if m:
             rest = p[m.end():]
-            cm = _COLON_RE.search(rest)
-            if cm and cm.start() <= 30:
-                heading = p[:m.end() + cm.start()]
-                body = rest[cm.end():]
+            sm = _STRONG_SEP.search(rest) or _WEAK_SEP.search(rest)
+            if sm:
+                heading = p[:m.end() + sm.start()]   # 含序号+标题，不含分隔符
+                body = rest[sm.end():]
             else:
-                cut = min(len(rest), 24)
-                heading = p[:m.end() + cut]
-                body = rest[cut:]
+                # 无分隔符：整段作标题（正文在后续段落），避免把正文截成标题
+                heading, body = p, ""
             cur = {"heading": heading, "toc": _strip_ordinal(heading), "paras": []}
             sections.append(cur)
             if body:
