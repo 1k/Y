@@ -416,12 +416,41 @@ a { color: inherit; text-decoration: none; }
 }
 .section-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
-.intro-content { font-size: 17px; line-height: 1.95; color: #34302A; }
-.intro-content p { margin: 0 0 22px; }
+.intro-content { font-size: 17px; line-height: 1.95; color: #34302A; max-width: 42em; }
+.intro-content p { margin: 0 0 1.4em; text-align: justify; text-justify: inter-ideograph; overflow-wrap: anywhere; }
 .intro-content p:first-of-type::first-letter {
-  font-family: var(--serif); font-weight: 900; font-size: 3.4em; line-height: .8;
-  float: left; margin: 6px 14px 0 0; color: var(--accent);
+  font-family: var(--serif); font-weight: 900; font-size: 3.2em; line-height: .82;
+  float: left; margin: 6px 12px 0 0; color: var(--accent);
 }
+
+/* layered sub-headings within intro (六段式) */
+.intro-h {
+  font-family: var(--serif); font-weight: 700; font-size: 21px; line-height: 1.4;
+  color: var(--ink); margin: 34px 0 14px; padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: 12px; scroll-margin-top: 104px;
+}
+.intro-h:first-of-type { margin-top: 6px; padding-top: 0; border-top: 0; }
+.intro-h::before {
+  content: ""; flex: 0 0 auto; width: 4px; height: 1em; min-height: 18px;
+  background: var(--accent); border-radius: 2px;
+}
+
+/* in-article table of contents */
+.intro-toc {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px;
+  background: var(--paper-2); border: 1px solid var(--line);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 30px; scroll-margin-top: 104px;
+}
+.intro-toc .toc-label {
+  font-family: var(--serif); font-weight: 700; font-size: 14px; color: var(--accent); margin-right: 4px;
+}
+.intro-toc .toc-link {
+  font-size: 13px; color: var(--ink-soft); padding: 4px 12px;
+  border: 1px solid var(--line-strong); border-radius: 999px; background: var(--white);
+  transition: color .25s, border-color .25s, background .25s;
+}
+.intro-toc .toc-link:hover { color: var(--accent); border-color: var(--accent); }
 
 .highlight-points { display: grid; gap: 18px; margin-top: 38px; }
 .point {
@@ -477,7 +506,11 @@ a { color: inherit; text-decoration: none; }
   .city-section { padding: 56px 0 18px; }
   .detail-hero { padding: 120px 20px 56px; }
   .detail-main { padding: 54px 0 20px; }
-  .intro-content { font-size: 16px; }
+  .intro-content { font-size: 16px; max-width: none; }
+  .intro-content p:first-of-type::first-letter { font-size: 2.8em; margin: 4px 9px 0 0; }
+  .intro-h { font-size: 18px; margin: 26px 0 12px; padding-top: 20px; }
+  .intro-toc { padding: 12px 14px; gap: 7px 8px; }
+  .intro-toc .toc-link { font-size: 12.5px; padding: 3px 10px; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
   .footer-links { gap: 18px; flex-wrap: wrap; }
 }

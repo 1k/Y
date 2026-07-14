@@ -11,3 +11,13 @@ build/
 # 其他可能的忽略项
 *.tmp
 *.bak
+
+# 临时研究/调试脚本（非站点源码，勿提交）
+tmp_updates/
+extract.py
+tmp_*.py
+augment*.py
+boost*.py
+combine.py
+build_group*.py
+exp_*.py

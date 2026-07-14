@@ -10,6 +10,7 @@ Output (all written under dist/ so the Pages artifact is self-contained):
 """
 import json
 import os
+import re
 import shutil
 from jinja2 import Environment, FileSystemLoader
 
@@ -41,6 +42,51 @@ def city_tint(index_num):
     return "hsl(%d, 46%%, 42%%)" % hue
 
 
+# 将扁平的 intro 段落数组解析为带层级的小节（内容不改动 site.json 原文）
+_ORD_RE = re.compile(r'^([一二三四五六七八九十]+[、.．]|[（(][一二三四五六七八九十]+[)）]|[0-9]+[.．、])')
+_COLON_RE = re.compile(r'[：:]')
+
+
+def _strip_ordinal(text):
+    return _ORD_RE.sub("", text).strip()
+
+
+def parse_intro_sections(attraction):
+    """返回 [{heading, toc, paras, anchor}, ...]；heading 为 None 表示开篇引言段。
+
+    处理两种写法：
+      (a) 短标题段「一、概览与地理位置」后接正文段；
+      (b) 标题与正文同段「一、概览与地理位置：正文……」，按首个冒号拆分。
+    """
+    intro = attraction.get("intro") or []
+    sections = []
+    cur = None
+    for p in intro:
+        m = _ORD_RE.match(p)
+        if m:
+            rest = p[m.end():]
+            cm = _COLON_RE.search(rest)
+            if cm and cm.start() <= 30:
+                heading = p[:m.end() + cm.start()]
+                body = rest[cm.end():]
+            else:
+                cut = min(len(rest), 24)
+                heading = p[:m.end() + cut]
+                body = rest[cut:]
+            cur = {"heading": heading, "toc": _strip_ordinal(heading), "paras": []}
+            sections.append(cur)
+            if body:
+                cur["paras"].append(body)
+        else:
+            if cur is None:
+                cur = {"heading": None, "toc": None, "paras": []}
+                sections.append(cur)
+            cur["paras"].append(p)
+    for i, s in enumerate(sections, 1):
+        s["anchor"] = "sec-%d" % i
+    return sections
+
+
 def prepare(data):
     for c in data["cities"]:
         try:
@@ -52,6 +98,7 @@ def prepare(data):
         c["region"] = REGION_MAP.get(c["id"], "其他")
         for a in c["attractions"]:
             a["tint"] = tint
+            a["intro_sections"] = parse_intro_sections(a)
             if not a.get("short"):
                 a["short"] = a.get("subtitle") or (a["intro"][0][:30] + "…" if a.get("intro") else "")
             if not a.get("no"):

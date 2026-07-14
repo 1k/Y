@@ -30,8 +30,18 @@
                     <h2>景点介绍</h2>
                 </div>
                 <div class="intro-content" id="introContent">
-                    {% for p in attraction.intro %}
-                    <p>{{ p }}</p>
+                    {% set headed = attraction.intro_sections | selectattr('heading') | list %}
+                    {% if headed | length > 1 %}
+                    <nav class="intro-toc" aria-label="本文导览">
+                        <span class="toc-label">本文导览</span>
+                        {% for s in attraction.intro_sections %}
+                        {% if s.heading %}<a class="toc-link" href="#{{ s.anchor }}">{{ s.toc }}</a>{% endif %}
+                        {% endfor %}
+                    </nav>
+                    {% endif %}
+                    {% for s in attraction.intro_sections %}
+                    {% if s.heading %}<h3 class="intro-h" id="{{ s.anchor }}">{{ s.heading }}</h3>{% endif %}
+                    {% for p in s.paras %}<p>{{ p }}</p>{% endfor %}
                     {% endfor %}
                 </div>
 
