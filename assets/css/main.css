@@ -39,7 +39,7 @@ body {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* paper grain */
@@ -611,7 +611,7 @@ a { color: inherit; text-decoration: none; }
 .city-hero-stats b { font-family: var(--serif); font-weight: 700; }
 .city-hero-stats .dot { opacity: .5; }
 
-.city-body { padding: 64px 0 30px; overflow-x: hidden; }
+.city-body { padding: 64px 0 30px; overflow-x: clip; }
 .city-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; align-items: start; }
 .city-list-wrap { min-width: 0; }
 .attr-list { display: flex; flex-direction: column; gap: 14px; }
