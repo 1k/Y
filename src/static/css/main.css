@@ -28,7 +28,7 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scrollbar-gutter: stable; }
 
 body {
   margin: 0;
@@ -612,8 +612,8 @@ a { color: inherit; text-decoration: none; }
 .city-hero-stats .dot { opacity: .5; }
 
 .city-body { padding: 64px 0 30px; overflow-x: hidden; }
-.city-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; align-items: start; overflow-x: hidden; }
-.city-list-wrap { min-width: 0; overflow-x: hidden; }
+.city-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; align-items: start; }
+.city-list-wrap { min-width: 0; }
 .attr-list { display: flex; flex-direction: column; gap: 14px; }
 .attr-row {
   position: relative; display: flex; align-items: center; gap: 18px; padding: 18px 20px;
