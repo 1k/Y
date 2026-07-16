@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>溢出诊断工具 · rzuc.com</title>
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; background: #1a1a2e; color: #eee; }
+  h1 { text-align: center; padding: 20px; margin: 0; background: #16213e; }
+  .frame { display: flex; gap: 20px; padding: 20px; justify-content: center; flex-wrap: wrap; }
+  .card { background: #fff; border-radius: 12px; overflow: hidden; width: 1280px; height: 720px; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+  .card iframe { width: 100%; height: 100%; border: none; }
+  .label { text-align: center; font-size: 14px; color: #aaa; margin-top: 8px; }
+  .label span { color: #e94560; font-weight: bold; }
+  .info { max-width: 1280px; margin: 20px auto; background: #16213e; border-radius: 12px; padding: 20px; }
+  .info h2 { margin: 0 0 10px; color: #e94560; }
+  .info code { background: #0f3460; padding: 2px 6px; border-radius: 4px; }
+  pre { background: #0f3460; padding: 14px; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<h1>🔍 rzuc.com 城市页水平溢出诊断工具</h1>
+
+<div class="frame">
+  <div>
+    <div class="card"><iframe id="fBad" src="about:blank"></iframe></div>
+    <div class="label">溢出页面（预期有红框）<span id="badName"></span></div>
+  </div>
+  <div>
+    <div class="card"><iframe id="fGood" src="about:blank"></iframe></div>
+    <div class="label">正常页面（无红框）<span id="goodName"></span></div>
+  </div>
+</div>
+
+<div class="info">
+  <h2>使用方法</h2>
+  <ol>
+    <li>上方两个窗口分别加载「溢出城市」和「正常城市」的页面（1280×720 模拟常见桌面视口）</li>
+    <li>红色边框 = 该元素的宽度超过了其父容器（即溢出源）</li>
+    <li>控制台 (F12) 会打印每个溢出元素的具体数据：元素标签、类名、自身宽度、父容器宽度、超出像素数</li>
+    <li><b>诊断脚本会在页面加载后 2 秒自动运行</b>（等待 Google Fonts 渲染完成）</li>
+  </ol>
+  <h2>当前测试配置</h2>
+  <pre id="config"></pre>
+</div>
+
+<script>
+// ===== 配置：修改这里选择要对比的城市 =====
+const BAD_CITY = 'tianjin';   // 报告溢出的城市
+const GOOD_CITY = 'xian';     // 正常的城市
+const SITE = location.hostname === 'localhost' ? '' : 'https://www.rzuc.com';
+// ============================================
+
+document.getElementById('badName').textContent = ` — ${BAD_CITY}`;
+document.getElementById('goodName').textContent = ` — ${GOOD_CITY}`;
+document.getElementById('config').textContent =
+`溢出城市: ${BAD_CITY}
+正常城市: ${GOOD_CITY}
+站点地址: ${SITE || '(需部署到服务器后使用，本地请改为实际地址)'}
+
+视口模拟: 1280 × 720 px
+诊断延迟: 2000ms (等字体加载)`;
+
+// 注入诊断脚本的函数
+function makeDiagnosticJS(cityName) {
+  return `
+(function(){
+  function diagnose() {
+    var results = [];
+    var all = document.querySelectorAll('*');
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      // 跳过 html, body, script, style, meta, link 等非视觉元素
+      if (/^(html|body|script|style|meta|link|br|hr)$/i.test(el.tagName)) continue;
+      // 跳过 position:fixed 元素（header 等）
+      var cs = getComputedStyle(el);
+      if (cs.position === 'fixed') continue;
+      var parent = el.parentElement;
+      if (!parent) continue;
+      var pcs = getComputedStyle(parent);
+      var ew = el.scrollWidth;
+      var pw = parent.clientWidth;
+      // 如果元素比父容器宽（考虑一点容差 1px）
+      if (ew > pw + 1) {
+        results.push({
+          tag: el.tagName.toLowerCase(),
+          cls: el.className || '',
+          id: el.id || '',
+          elemW: Math.round(ew),
+          parentW: Math.round(pw),
+          excess: Math.round(ew - pw),
+          text: (el.textContent || '').trim().substring(0, 80)
+        });
+        // 标红
+        el.style.outline = '3px solid red';
+        el.title = '⚠️ 溢出! 元素宽:' + Math.round(ew) + 'px > 父容器:' + Math.round(pw) + 'px (超' + Math.round(ew-pw) + 'px)';
+      }
+    }
+    console.group('🔍 [' + cityName + '] 溢出诊断结果 (共 ' + results.length + ' 个溢出元素)');
+    if (results.length === 0) {
+      console.log('%c✅ 未检测到水平溢出!', 'color:green;font-size:16px;font-weight:bold');
+    } else {
+      results.sort(function(a,b){ return b.excess - a.excess; });
+      results.forEach(function(r, idx) {
+        var msg = '#' + (idx+1) + ' <' + r.tag + '>' +
+          (r.cls ? '.' + r.cls.split(' ')[0] : '') +
+          (r.id ? '#' + r.id : '') +
+          ': 宽=' + r.elemW + 'px > 父=' + r.parentW + 'px (超' + r.excess + 'px)';
+        if (r.text) msg += ' | "' + r.text + '"';
+        console.log('%c' + msg, r.excess > 100 ? 'color:red;font-weight:bold' : 'color:orange');
+      });
+    }
+    console.groupEnd();
+    
+    // 在页面上显示摘要
+    var div = document.createElement('div');
+    div.style.cssText = 'position:fixed;top:10px;left:10px;z-index:99999;background:rgba(220,40,40,.92);color:#fff;padding:12px 18px;border-radius:10px;font-family:system-ui;font-size:14px;max-width:500px;box-shadow:0 4px 20px rgba(0,0,0,.4);';
+    if (results.length === 0) {
+      div.style.background = 'rgba(40,160,80,.92)';
+      div.textContent = '✅ ' + cityName + ': 未检测到水平溢出';
+    } else {
+      var worst = results[0];
+      div.innerHTML = '❌ <b>' + cityName + '</b>: 检测到 <b>' + results.length + '</b> 个溢出元素<br>' +
+        '最大溢出: <b>&lt;' + worst.tag + '&gt;</b> 超出 <b>' + worst.excess + 'px</b><br>' +
+        '<small style="opacity:.8">详情见控制台 (F12)</small>';
+    }
+    document.body.appendChild(div);
+  }
+  
+  setTimeout(diagnose, 2000);
+})();
+`;
+}
+
+// 加载 iframe
+document.getElementById('fBad').src = SITE + '/cities/' + BAD_CITY + '/';
+document.getElementById('fGood').src = SITE + '/cities/' + GOOD_CITY + '/';
+
+// 当 iframe 加载完成后注入诊断脚本
+function inject(iframeId, city) {
+  var iframe = document.getElementById(iframeId);
+  iframe.onload = function() {
+    try {
+      var doc = iframe.contentDocument || iframe.contentWindow.document;
+      var s = doc.createElement('script');
+      s.textContent = makeDiagnosticJS(city);
+      doc.head.appendChild(s);
+    } catch(e) {
+      // 跨域限制时提示用户
+      var div = document.createElement('div');
+      div.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;background:rgba(220,160,40,.95);color:#000;padding:24px;border-radius:12px;font-size:15px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.5);max-width:400px;';
+      div.innerHTML = '⚠️ <b>跨域限制</b><br><br>此诊断页需要从 <b>rzuc.com 域名下</b>访问才能注入诊断脚本。<br><br>请将此文件放到网站目录下通过域名访问。<br><small>(或直接在目标页面 F12 控制台手动运行诊断代码)</small>';
+      document.body.appendChild(div);
+    }
+  };
+}
+
+inject('fBad', BAD_CITY);
+inject('fGood', GOOD_CITY);
+
+// 也提供可复制的手动诊断代码
+console.log('%c===== 手动诊断代码（复制到目标页面 F12 控制台运行）=====', 'color:cyan;font-size:14px');
+console.log(makeDiagnosticJS('当前页面'));
+</script>
+</body>
+</html>
