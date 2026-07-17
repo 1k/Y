@@ -88,6 +88,15 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 1px 0 var(--line);
   padding: 12px 0;
 }
+
+/* 暗色 hero 页面（城市/景点页）：顶部即使用浅纸底色，避免 LOGO/导航在深色背景上不可见 */
+body.page-dark-hero .site-header {
+  background: rgba(251,249,244,.82);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  box-shadow: 0 1px 0 var(--line);
+  padding: 12px 0;
+}
 .header-inner {
   max-width: var(--maxw); margin: 0 auto; padding: 0 28px;
   display: flex; align-items: center; justify-content: space-between;
@@ -683,8 +692,8 @@ a { color: inherit; text-decoration: none; }
   .header-inner { flex-wrap: wrap; }
   .header-search { order: 3; flex-basis: 100%; max-width: none; margin: 10px 0 0; }
   .hero { min-height: 78vh; }
-  .city-hero { padding: 100px 20px 30px; }
-  .detail-hero { padding: 100px 20px 34px; }
+  .city-hero { padding: 150px 20px 30px; }
+  .detail-hero { padding: 150px 20px 34px; }
   .city-body { padding: 40px 0 18px; }
   .directory-grid { grid-template-columns: 1fr; }
   .directory-item:nth-child(odd) { border-right: 0; padding-right: 6px; }

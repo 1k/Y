@@ -3,6 +3,8 @@
 {% block description %}{{ attraction.meta_description or (attraction.short or attraction.subtitle) }}{% endblock %}
 {% block keywords %}{{ attraction.meta_keywords }}{% endblock %}
 
+{% block body_attr %}class="page-dark-hero"{% endblock %}
+
 {% block content %}
 <section class="detail-hero" style="--tint: {{ attraction.tint }}">
     <div class="container">

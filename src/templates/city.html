@@ -2,6 +2,8 @@
 {% block title %}{{ city.name }} · 城市指南 | {{ site.title }}{% endblock %}
 {% block description %}{{ city.desc }}{% endblock %}
 
+{% block body_attr %}class="page-dark-hero"{% endblock %}
+
 {% block content %}
 <!-- City hero -->
 <section class="city-hero" style="--tint: {{ city.tint }}">
